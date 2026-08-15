@@ -12,22 +12,22 @@ Umumiy byudjet: **~6 soat** kod + **30 daqiqa** ekran yozuvi. Muddat: boshlagani
 
 ## Tartib majburiy
 
-Sessiyalar bir-biriga bog'liq — 2 sessiya 1 siz, 3 sessiya 2 siz ishlamaydi. Lekin **3-sessiyadan keyin** loyiha allaqachon baholanadigan holatda bo'ladi (reconcile ishlaydi). Vaqt tugab qolsa, 4 va 5 dan qisqartiring, 1–3 dan emas.
+Sessiyalar bir-biriga bog'liq — 2 sessiya 1 siz, 3 sessiya 2 siz ishlamaydi. **3-sessiyadan keyin** loyiha allaqachon ishlaydigan holatda bo'ladi: `reconcile` toza o'tadi, ya'ni model to'g'riligi isbotlangan. Vaqt tugab qolsa, 4 va 5 dan qisqartiring, 1–3 dan emas.
 
-## Ustuvorlik (vaqt yetmasa nima tashlanadi)
+## Ustuvorlik
 
-TZ §14 baholash vazni bo'yicha:
+Nima nimaga tayanadi:
 
-| Ball | Qism | Tashlab bo'ladimi? |
-|---|---|---|
-| 30% | Ma'lumotlar modeli, uchala tenglik | **Yo'q** — bu loyihaning o'zi |
-| 25% | Ekran yozuvi | **Yo'q** — yozuvsiz topshiriq ko'rilmaydi (§14) |
-| 20% | 5 test stsenariysi | Yo'q — arzon va aniq ball |
-| 15% | `DECISIONS.md` (ochiq savol) | Yo'q — 20 daqiqalik yozuv, 15% ball |
-| 10% | Kod sifati, struktura, commitlar, README | Qisman |
-| 0% | Frontend dizayni | Ha — faqat borligi tekshiriladi (§8, §14) |
+| Qism | Nega shu tartibda |
+|---|---|
+| Ma'lumotlar modeli, uchala tenglik | Loyihaning o'zi shu. Model noto'g'ri bo'lsa, ustidagi hamma narsa noto'g'ri raqam ko'rsatadi |
+| `npm run reconcile` toza o'tishi | Modelning to'g'riligini isbotlaydigan yagona avtomatik dalil. O'tmasa — hisobotlarga ishonish uchun asos yo'q |
+| 5 test stsenariysi | TZ §5 dagi raqamlar. Kichik, aniq, va model buzilganini eng tez ko'rsatadi |
+| `DECISIONS.md` (ochiq savol) | Noaniq talab bilan qanday ishlashni ko'rsatadi — koddan alohida ko'nikma |
+| Kod sifati, struktura, commitlar, README | Boshqa odam kodni o'qib tushunishi va ishga tushira olishi uchun |
+| Frontend | Raqamlar ko'rinishi uchun. Dizayn talab qilinmagan — bitta jadval yetarli |
 
-**Ikkita qattiq to'siq** (§14): ekran yozuvi bo'lmasa, yoki `npm run reconcile` toza o'tmasa — topshiriq **umuman ko'rib chiqilmaydi**. Boshqa hamma narsa shulardan keyin keladi.
+Ikkita narsa qolganlarining hammasini ma'nosiz qiladi: **`reconcile` toza o'tmasligi** (hisobot raqamlariga ishonib bo'lmaydi) va **ishni tushuntirib bera olmaslik** (nima uchun shunday qilinganini ko'rsatolmasangiz, to'g'ri kod ham tasodif bo'lib ko'rinadi).
 
 ## Har sessiya oxirida
 
@@ -48,7 +48,7 @@ Bazasiz prototip — modelni 44 ta tekshiruvda tasdiqlaydi (TZ §5 ning beshala 
 
 - [`docs/model-prototype.js`](../docs/model-prototype.js) — tekshirilgan model prototipi ⭐
 - [`docs/01-stack.md`](../docs/01-stack.md) — stack, struktura, nima ishlatilmaydi
-- [`docs/02-model.md`](../docs/02-model.md) — ma'lumotlar modeli ⭐ 30% ball
+- [`docs/02-model.md`](../docs/02-model.md) — ma'lumotlar modeli ⭐ butun loyihaning asosi
 - [`docs/03-events.md`](../docs/03-events.md) — hodisa → yozuv xaritasi
 - [`docs/04-reports.md`](../docs/04-reports.md) — hisobotlar + reconcile
 - [`docs/05-decisions.md`](../docs/05-decisions.md) — modellashtirish qarorlari (ekran yozuvi uchun)

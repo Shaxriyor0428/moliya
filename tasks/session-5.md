@@ -2,14 +2,17 @@
 
 **Vaqt: 60 daqiqa** (+ 30 daqiqa ekran yozuvi)
 
-**Maqsad:** repo topshirishga tayyor. Bu sessiyada **40% ball** turibdi (ekran yozuvi 25% + ochiq savol 15%) — frontendga qaraganda ancha ko'p.
+**Maqsad:** repo topshirishga tayyor. Bu sessiyaning og'irligi ikkita hujjatda — ekran yozuvi va ochiq savol javobi. Ikkalasi ham qilingan ishni tushuntiradi; frontend esa faqat raqamlarni ko'rsatadi. Vaqtni shunga qarab taqsimlang.
 
 ---
 
 ## 5.1. Frontend (30 daqiqa — qat'iy chegara) — TZ §8
 
-> TZ: *"Dizayn baholanmaydi. Oddiy jadval yetarli, UI kutubxona kerak emas. Bunga 30 daqiqadan ko'p vaqt sarflamang."*
-> §14: *"Frontend alohida baholanmaydi — faqat borligi tekshiriladi."*
+> TZ §8: *"Dizayn baholanmaydi. Oddiy jadval yetarli, UI kutubxona kerak emas.
+> Bunga 30 daqiqadan ko'p vaqt sarflamang."*
+
+Vazifasi bitta: hisobot raqamlari brauzerda ko'rinsin. Undan ortig'i shu vaqtda
+DECISIONS.md va ekran yozuvidan olinadi.
 
 `frontend/` — Vite + React + TS, alohida `package.json`.
 
@@ -28,7 +31,7 @@
 
 ---
 
-## 5.2. `DECISIONS.md` (20 daq) ⭐ 15% ball — TZ §11
+## 5.2. `DECISIONS.md` (20 daq) ⭐ — TZ §11
 
 Investor talabi: *"Har oyda foydadan menga tegishli ulushni hisoblab, hisobotda ko'rsatinglar."* Boshqa tafsilot yo'q, investor aloqada emas.
 
@@ -115,9 +118,10 @@ npm run dev            # ko'tariladi
 
 ---
 
-## 5.6. Ekran yozuvi (30 daq) ⭐ 25% ball — TZ §13.2
+## 5.6. Ekran yozuvi (30 daq) ⭐ — TZ §13.2
 
-> Yozuvsiz topshiriq **ko'rib chiqilmaydi**. Bu frontenddan 25 barobar qimmatroq.
+> Kod nima qilishini ko'rsatadi, yozuv esa **nega shunday qilinganini**. Ikkinchisi
+> koddan o'qib bo'lmaydi — shuning uchun u alohida talab qilinadi.
 
 Bitta dubl, montaj kerak emas, sifat muhim emas. O'zbek/rus/ingliz — erkin gapiradiganingizda.
 
@@ -139,14 +143,14 @@ Reja (TZ aynan shu beshtasini so'raydi):
 
 | | Element | TZ |
 |---|---|---|
-| ☐ | Public repo, 15+ commit | §13.1 |
+| ☐ | Public repo, 15+ commit — ish qanday olib borilgani ko'rinsin | §13.1 |
 | ☐ | `README.md` — model izohi + o'lchovlar | §13.1, §9 |
 | ☐ | `DECISIONS.md` | §11 |
 | ☐ | `ai-log.md` | §12 |
 | ☐ | `npm run seed` | §13.1 |
-| ☐ | `npm run reconcile` → exit 0 | §4 ⭐ qattiq to'siq |
+| ☐ | `npm run reconcile` → exit 0 | §4 ⭐ usiz raqamlarga ishonib bo'lmaydi |
 | ☐ | `npm test` — 5 stsenariy | §5 |
 | ☐ | `npm run dev` | §13.1 |
 | ☐ | Frontend mavjud | §8 |
-| ☐ | Ekran yozuvi ≤30 daq | §13.2 ⭐ qattiq to'siq |
+| ☐ | Ekran yozuvi ≤30 daq | §13.2 ⭐ qarorlarni tushuntiradi |
 | ☐ | Telegram orqali yuborildi | §13 |

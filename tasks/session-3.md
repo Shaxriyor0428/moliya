@@ -2,7 +2,7 @@
 
 **Vaqt: 75–90 daqiqa**
 
-**Maqsad:** `npm run reconcile` toza o'tadi. Bu TZ §14 dagi ikkita qattiq to'siqdan biri — usiz topshiriq ko'rilmaydi.
+**Maqsad:** `npm run reconcile` toza o'tadi. Bu — model to'g'riligining yagona avtomatik dalili. O'tmaguncha hisobot raqamlariga ishonish uchun asos yo'q.
 
 Ma'lumotnoma: [`docs/04-reports.md`](../docs/04-reports.md) — agregatsiya pipeline'lari yozilgan.
 

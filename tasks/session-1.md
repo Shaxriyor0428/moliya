@@ -105,4 +105,4 @@
 | Mongoose sub-schema da `null` ni `undefined` ga aylantiradi | `cashFlow` uchun `default: undefined` bermang; hook da `'cashFlow' in line` bilan tekshiring |
 | `tsx` + ESM/CJS chalkashligi | `tsconfig` da `module: NodeNext`, `package.json` da `"type": "module"` |
 | Mahalliy vaqt kirib qolishi | `new Date('2026-01-31')` ISO sana sifatida UTC da parse bo'ladi — lekin `new Date(2026, 0, 31)` **mahalliy**. Faqat `Date.UTC` ishlating |
-| Skelet ustida ortiqcha vaqt ketishi | 15 daqiqadan oshsa — to'xtang, keyingi bosqichga o'ting. Struktura baholanmaydi (§15) |
+| Skelet ustida ortiqcha vaqt ketishi | 15 daqiqadan oshsa — to'xtang, keyingi bosqichga o'ting. Struktura muhim emas — model va tenglik muhim |

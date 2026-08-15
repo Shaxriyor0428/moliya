@@ -17,7 +17,7 @@ Ma'lumotnoma: [`docs/03-events.md`](../docs/03-events.md) — har bir yozuvning 
 - [ ] `Loan { principal, annualRatePercent, takenAt, termMonths }`
 - [ ] `Investor { name }`
 
-10 daqiqadan oshmasin. Bu qism baholanmaydi.
+10 daqiqadan oshmasin. Hisobot raqamlari bu kolleksiyalarga bog'liq emas — hammasi jurnaldan chiqadi.
 
 **Commit:** `feat: reference collections`
 

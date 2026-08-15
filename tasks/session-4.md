@@ -6,7 +6,7 @@
 
 ---
 
-## 4.1. Beshta majburiy test (35 daq) ⭐ 20% ball
+## 4.1. Beshta majburiy test (35 daq) ⭐
 
 **Seeddan OLDIN yozing.** Ular kichik, aniq, va modelni tasdiqlaydi. Seed kattaroq va shovqinliroq — u yiqilsa, testlar qaerda xato ekanini ko'rsatadi.
 
@@ -114,7 +114,7 @@ oy oxiri salary_accrual
 
 ---
 
-## 4.3. Reconcile toza o'tishi (10 daq) ⭐ qattiq to'siq
+## 4.3. Reconcile toza o'tishi (10 daq) ⭐
 
 ```bash
 npm run seed && npm run reconcile
