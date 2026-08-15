@@ -4,16 +4,14 @@ O'quv markaz CRM tizimining moliya moduli: **Foyda va zarar (P&L)**, **Pul oqimi
 
 Topshiriq: [`tz.md`](tz.md)
 
-> **Holat:** reja tayyor, implementatsiya boshlanmagan. Ish rejasi — [`tasks/`](tasks/README.md).
-> Bu README implementatsiya davomida to'ldiriladi; ⬜ belgisi hali yozilmagan bo'limlarni ko'rsatadi.
->
 > Model bazasiz prototipda tasdiqlangan: `node docs/model-prototype.js` → **44/44 tekshiruv o'tadi**.
+> Implementatsiya aynan shu mantiqni takrorlaydi.
 
 ---
 
 ## Stack
 
-Node.js 20+ · TypeScript · MongoDB 7 · Mongoose · Express · Vitest · React + Vite (frontend)
+Node.js 22 · TypeScript 7 · MongoDB 8.3 · Mongoose 9 · Express 5 · zod 4 · Vitest 4 · Vite 7 + React 19 (frontend)
 
 Sabablar va rad etilgan variantlar: [`docs/01-stack.md`](docs/01-stack.md)
 
@@ -21,28 +19,43 @@ Sabablar va rad etilgan variantlar: [`docs/01-stack.md`](docs/01-stack.md)
 
 ## Ishga tushirish
 
-Talab: **Node.js 20+** va ishlab turgan **MongoDB 6/7** (standalone — replica set kerak emas).
+Talab: **Node.js 20+** va ishlab turgan **MongoDB 6+** (standalone — replica set
+kerak emas, sababi pastda "Ma'lumotlar modeli" bo'limida).
 
 ```bash
 # Mongo mahalliy ishlab turgan bo'lsa — hech narsa kerak emas.
-# Bo'lmasa:  docker run -d -p 27017:27017 --name mongo mongo:7
+# Bo'lmasa, bir qatorda:  docker run -d -p 27017:27017 --name mongo mongo:8
 
 cp .env.example .env          # MONGO_URI=mongodb://127.0.0.1:27017/moliya
 npm i
 
-npm run seed                  # 3 yillik ma'lumot
+npm run seed                  # 3 yillik ma'lumot (~26 s)
 npm run reconcile             # uchta tenglikni tekshirish → exit 0
-npm test                      # TZ §5 dagi 5 ta stsenariy
+npm test                      # 76 test, shu jumladan TZ §5 dagi 5 ta stsenariy
 npm run dev                   # API :3000
-
-cd frontend && npm i && npm run dev   # :5173
 ```
+
+Qo'shimcha skriptlar: `npm run bench` (§9 o'lchovi), `npm run typecheck`.
+
+### Frontend
+
+Alohida `package.json`, o'z `npm i` si bilan. Backend ishlab turishi kerak.
+
+```bash
+npm run dev                              # 1-terminal: API :3000
+
+cd frontend && npm i && npm run dev      # 2-terminal: UI  :5173
+```
+
+Keyin brauzerda `http://localhost:5173` — yuqoridagi `<select>` dan oyni tanlang.
+Backend CORS ni ochiq qoldiradi, shuning uchun Vite proxy sozlanmagan.
 
 ---
 
-## Ma'lumotlar modeli ⬜
+## Ma'lumotlar modeli
 
-> To'liq versiya: [`docs/02-model.md`](docs/02-model.md). Quyidagi qisqartma implementatsiyadan keyin yakunlanadi.
+> To'liq asoslash va rad etilgan variantlar: [`docs/02-model.md`](docs/02-model.md).
+> Kod: [`src/ledger/`](src/ledger) — hisoblar rejasi, sxema, `postEntry()`.
 
 **Ikki tomonlama yozuv (double-entry), ishorali summa bilan.**
 
@@ -129,11 +142,67 @@ Bazadagi **har bir oy** uchun uchta tenglikni tekshiradi:
 
 Har biri uchun: tekshirilgan oylar soni, mos kelmagan oylar soni, farqlar yig'indisi. Hammasi to'g'ri bo'lsa `exit 0`, aks holda `exit 1`.
 
-**Reconcile hisobot funksiyalarini chaqirmaydi** — xom `lines` ustidan mustaqil hisoblaydi. Aks holda hisobotdagi xato o'sha xato bilan tekshirilib, aniqlanmay qolardi.
+**Reconcile hisobot funksiyalarini chaqirmaydi** — xom `lines` ustidan mustaqil
+hisoblaydi. Agar u `pnl()` va `balance()` natijalarini solishtirsa, ikkalasidagi
+bir xil xato tekshiruvdan o'tib ketardi. Shu sababli reconcile da agregatsiya
+pipeline'i ham ishlatilmaydi: yozuvlar `lean()` bilan xom o'qiladi va oddiy sikl
+bilan yig'iladi — hisobot kodi bilan umumiy kodi yo'q.
 
-Qo'shimcha yaxlitlik tekshiruvlari: har yozuvda `sum(lines) === 0`, butun sonlik, pul qatorlarida `cashFlow` mavjudligi, `period === toPeriod(date)` (timezone), hisob kodlarining haqiqiyligi.
+Qo'shimcha yaxlitlik tekshiruvlari: har yozuvda `sum(lines) === 0`, qator soni ≥ 2,
+butun sonlik, pul qatorlarida `cashFlow` mavjudligi va pul bo'lmaganda yo'qligi,
+`period === toPeriod(date)` (timezone), hisob kodlarining haqiqiyligi,
+`deferred_revenue ≥ 0`, `salary_payable ≥ 0`.
 
-⬜ *Chiqish namunasi implementatsiyadan keyin qo'shiladi.*
+### Chiqish
+
+`npm run seed` dan keyin (36 oy, 28 170 yozuv):
+
+```
+Tekshirilgan oylar: 36  (2024-01 … 2026-12)
+
+  1) Balans tenglamasi         36/36 mos    farq: 0
+  2) Pul oqimi bog'lanishi     36/36 mos    farq: 0
+  3) Foyda bog'lanishi         36/36 mos    farq: 0
+
+  Yaxlitlik: 28 170 yozuv, 56 653 qator — hammasi balanslashgan
+
+RECONCILE: OK
+```
+
+Buzilgan ma'lumotda (o'sha bazaga ataylab ikkita nosoz yozuv qo'shildi:
+biri balanslashmagan, ikkinchisining pul qatorida `cashFlow` yo'q — ikkalasi ham
+`2026-01` da). Chiqish `exit 1` bilan tugaydi:
+
+```
+Tekshirilgan oylar: 36  (2024-01 … 2026-12)
+
+  1) Balans tenglamasi         24/36 mos    farq: 1 200 000
+       2026-01            100 000
+       2026-02            100 000
+       …
+       2026-12            100 000
+  2) Pul oqimi bog'lanishi     35/36 mos    farq: -2 000 000
+       2026-01         -2 000 000
+  3) Foyda bog'lanishi         36/36 mos    farq: 0
+
+  Yaxlitlik: 2 ta muammo
+       2026-01 operating_expense: yozuv balanslashmagan
+       2026-01 student_payment: cash.bank pul hisobi, lekin cashFlow yo'q
+
+RECONCILE: FAILED
+```
+
+Ikkita tafsilot diqqatga loyiq:
+
+- **Balans tenglamasi 12 oyda yiqildi, bittada emas.** U kümülativ: yanvarda
+  paydo bo'lgan og'ish keyingi har bir oyda ham ko'rinadi. Pul oqimi esa oylik —
+  faqat buzilgan oyni ko'rsatadi. Ikkalasi birga buzilish **qachon** boshlanganini
+  aniq ko'rsatadi.
+- **Foyda bog'lanishi buzilmadi.** Bu ham to'g'ri: qo'shilgan xarajat o'sha oyning
+  P&L iga ham, taqsimlanmagan foydasiga ham bir xil tushdi. Uchta tenglik uch xil
+  narsani ushlaydi — biri yiqilmagani qolganlarini oqlamaydi.
+
+Bu holat `tests/reports.test.ts` da yettita turli buzilish uchun avtomatlashtirilgan.
 
 ---
 
@@ -177,14 +246,21 @@ Agar ma'lumot 10 barobar o'ssa, birinchi qadam qo'shma indeks bo'ladi — u
 ```
 src/
   ledger/     hisoblar rejasi, jurnal sxemasi, postEntry()   ← yadro
-  events/     biznes hodisa → jurnal yozuvi
-  reports/    P&L, pul oqimi, balans
+  events/     biznes hodisa → jurnal yozuvi (12 ta hodisa)
+  reports/    P&L, pul oqimi, balans, oylar ro'yxati
   scripts/    seed, reconcile, bench
-  http/       3 ta endpoint
-tests/scenarios/   TZ §5 dagi 5 ta majburiy stsenariy
-frontend/          Vite + React, bitta sahifa
-docs/              model va qarorlar hujjatlari
-tasks/             5 sessiyaga bo'lingan ish rejasi
+  models/     Student, Employee, Loan, Investor — faqat seed uchun
+  http/       4 ta endpoint
+  db/         ulanish va indekslar
+  shared/     money, period, seeded random
+tests/
+  ledger.test.ts     invariant: balanslashmagan yozuv rad etiladi
+  events.test.ts     12 ta hodisa, barcha qatorlar yig'indisi 0
+  reports.test.ts    tz.md §2.3 misoli + reconcile buzilishlarni ushlashi
+  scenarios/         TZ §5 dagi 5 ta majburiy stsenariy
+frontend/            Vite + React, bitta sahifa
+docs/                model va qarorlar hujjatlari
+tasks/               5 sessiyaga bo'lingan ish rejasi
 ```
 
 ---
@@ -200,5 +276,6 @@ tasks/             5 sessiyaga bo'lingan ish rejasi
 | [`docs/04-reports.md`](docs/04-reports.md) | Hisobot algoritmlari va reconcile spetsifikatsiyasi |
 | [`docs/05-decisions.md`](docs/05-decisions.md) | Modellashtirish qarorlari (D1–D10) |
 | [`tasks/`](tasks/README.md) | 5 sessiyaga bo'lingan ish rejasi |
-| `DECISIONS.md` ⬜ | TZ §11 — investor ulushi bo'yicha ochiq savol |
-| `ai-log.md` ⬜ | TZ §12 — AI workflow |
+| [`DECISIONS.md`](DECISIONS.md) | TZ §11 — investor ulushi bo'yicha ochiq savol |
+| [`ai-log.md`](ai-log.md) | TZ §12 — AI bilan ishlash jurnali |
+| [`CLAUDE.md`](CLAUDE.md) | Loyihaning qat'iy qoidalari (AI sessiyalari uchun) |

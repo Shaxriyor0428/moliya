@@ -2,17 +2,24 @@
 
 ## Stack
 
+Versiyalar — amalda o'rnatilgan va sinalganlari (`package-lock.json`).
+
 | Qatlam | Tanlov | Sabab |
 |---|---|---|
-| Runtime | Node.js 20+ | TZ §0 talabi |
-| Til | TypeScript (strict) | TZ §0 talabi |
-| DB | MongoDB 7 | TZ §0 talabi (majburiy) |
-| ODM | Mongoose 8 | Sxema validatsiyasi kerak — `sum(lines) === 0` invariantini yozuv paytida majburlash uchun |
+| Runtime | Node.js 22 (20+ yetarli) | TZ §0 talabi |
+| Til | TypeScript 7 (strict) | TZ §0 talabi |
+| DB | MongoDB 8.3 (6+ yetarli) | TZ §0 talabi (majburiy) |
+| ODM | Mongoose 9 | Sxema validatsiyasi kerak — `sum(lines) === 0` invariantini yozuv paytida majburlash uchun |
 | HTTP | Express 5 | Minimal. TZ §15: "kutubxona tanlovi baholanmaydi". Auth yo'q, middleware zanjiri kerak emas |
-| Test | Vitest | Tez, TS ni tabiiy o'qiydi, `tsx` bilan bir xil transform |
-| Skript ishga tushirish | tsx | `ts-node` + config ovorasi yo'q |
-| Frontend | Vite + React 19 + TS | TZ §8: React+TS, UI kutubxona kerak emas, ≤30 daqiqa |
-| Validatsiya | zod | Env va API query parametrlari uchun. Ixtiyoriy — vaqt yetmasa qo'lda tekshirув |
+| Test | Vitest 4 | Tez, TS ni tabiiy o'qiydi, `tsx` bilan bir xil transform |
+| Skript ishga tushirish | tsx 4 | `ts-node` + config ovorasi yo'q |
+| Frontend | Vite 7 + React 19 + TS 5 | TZ §8: React+TS, UI kutubxona kerak emas, ≤30 daqiqa |
+| Validatsiya | zod 4 | Env va API query parametrlari uchun |
+
+> Bu jadval dastlab Mongoose 8 / MongoDB 7 ni ko'zda tutgan edi. `npm i` amalda
+> yangiroq versiyalarni o'rnatdi va mahalliy server MongoDB 8.3 bo'lib chiqdi —
+> jadval haqiqiy holatga keltirildi. Mongoose 9 da bitta xatti-harakat tekshirildi:
+> subdocument da `null` va `undefined` farqi saqlanadi (`docs/02-model.md`).
 
 **MongoDB — mahalliy o'rnatilgan server** (Docker ishlatilmaydi). Standalone rejim, replica set shart emas — sababi `docs/02-model.md` da: qatorlar hujjat ichida bo'lgani uchun tranzaksiya kerak emas.
 
@@ -55,15 +62,19 @@ moliya-crm/
 │  │  └─ periods.ts          # bazadagi barcha oylar ro'yxati
 │  ├─ http/
 │  │  ├─ server.ts
-│  │  └─ routes.ts           # 3 ta endpoint
+│  │  └─ routes.ts           # 4 ta endpoint
+│  ├─ models/                # Student, Employee, Loan, Investor — faqat seed uchun
 │  ├─ scripts/
 │  │  ├─ seed.ts             # npm run seed
-│  │  └─ reconcile.ts        # npm run reconcile
+│  │  ├─ reconcile.ts        # npm run reconcile
+│  │  └─ bench.ts            # npm run bench
 │  └─ shared/
 │     ├─ money.ts            # butun son arifmetikasi + qoldiq taqsimlash
-│     └─ period.ts           # Date -> "YYYY-MM" (UTC)
+│     ├─ period.ts           # Date -> "YYYY-MM" (UTC)
+│     └─ random.ts           # qat'iy urug'li PRNG (seed takrorlanadigan bo'lsin)
 ├─ tests/
 │  ├─ helpers/db.ts          # har test bo'sh bazadan boshlanadi (TZ §5)
+│  ├─ *.test.ts              # ledger, events, reports
 │  └─ scenarios/*.test.ts    # 5 ta majburiy stsenariy
 └─ frontend/                 # alohida Vite app, o'z package.json i
    └─ src/App.tsx
@@ -103,10 +114,10 @@ TZ §10 "Doiradan tashqarida" va §15 "Baholanmaydi" ga asosan:
 |---|---|
 | Autentifikatsiya, JWT, sessiya, rollar | TZ §10 birinchi qatori. 0 ball |
 | Redis | Kesh kerak emas — §9 ni indeks bilan yopamiz, o'lchov bilan isbotlaymiz |
-| Admin/client panel ajratish | Foydalanuvchi yo'q. 3 ta endpoint yetarli |
+| Admin/client panel ajratish | Foydalanuvchi yo'q. 4 ta endpoint yetarli |
 | i18n / Accept-Language | Hisobot raqamlari tilga bog'liq emas |
 | Soft-delete | Jurnal o'zgarmas |
-| Swagger | 3 ta endpoint README da bir jadvalga sig'adi |
+| Swagger | 4 ta endpoint README da bir jadvalga sig'adi |
 | Amortizatsiya, soliq, valyuta, multi-tenant | TZ §10 |
 | Deploy / CI | TZ §10 |
 
