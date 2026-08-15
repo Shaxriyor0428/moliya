@@ -103,8 +103,10 @@ export function App() {
           <table border={1} cellPadding={6}>
             <tbody>
               <Row label="Daromad" value={data.pnl.revenue} />
+              {/* Xarajatlar musbat ko'rsatiladi — "Jami xarajat" bilan bir xil
+                  konvensiyada. API ham ularni musbat qaytaradi. */}
               {Object.entries(data.pnl.expenses).map(([account, amount]) => (
-                <Row key={account} label={account} value={-amount} />
+                <Row key={account} label={account} value={amount} />
               ))}
               <Row label="Jami xarajat" value={data.pnl.totalExpense} bold />
               <Row label="Sof foyda" value={data.pnl.netProfit} bold />
