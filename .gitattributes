@@ -1,0 +1,10 @@
+# Repoda hamma matn fayllari LF bilan saqlanadi. Windows'da ishlaganda
+# CRLF/LF farqi butun faylni "o'zgargan" qilib ko'rsatadi va commit
+# tarixini ifloslaydi (tz.md da 363 qator soxta diff shundan chiqqan edi).
+* text=auto eol=lf
+
+# Ikkilik fayllar — tegilmaydi
+*.png binary
+*.jpg binary
+*.pdf binary
+*.ico binary
