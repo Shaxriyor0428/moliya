@@ -105,3 +105,17 @@ qilmaganlikning asosi baholanadigan narsa (TZ §10, §15).
 | `docs/04-reports.md` | Hisobot agregatsiyalari, `reconcile` algoritmi va chiqish formati |
 | `docs/05-decisions.md` | Ochiq modellashtirish qarorlari D1–D10 |
 | `tasks/session-*.md` | Bosqichma-bosqich ish rejasi va commit nuqtalari |
+
+
+## Commit qoidalari
+
+- `git add .` YO'Q. Har doim aniq yo'llarni ko'rsat: `git add src/events/ tests/events.test.ts`
+- Bir commit = bir tugallangan fikr. 23 fayllik commit qilma.
+- Har commit ishlaydigan holatda qoldirilsin: commitdan oldin `npm test`.
+  Yiqilayotgan test bilan commit qilma.
+- Commit qilma: .env, node_modules, dist, coverage, *.tmp.*, debug uchun
+  yozilgan console.log, izohga olingan o'lik kod, "keyin o'chiraman" fayllar.
+- Commit xabari: `feat:` / `fix:` / `test:` / `chore:` / `docs:` prefiksi,
+  nima qilinganini ayt, qanday qilinganini emas.
+- `git commit -a` ishlatma — nima ketayotganini ko'rmay qolasan.
+- Commitdan oldin `git status` va `git diff --cached` ni ko'r.
