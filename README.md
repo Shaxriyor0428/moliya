@@ -137,21 +137,38 @@ Qo'shimcha yaxlitlik tekshiruvlari: har yozuvda `sum(lines) === 0`, butun sonlik
 
 ---
 
-## Unumdorlik ⬜
+## Unumdorlik
 
-TZ §9: 3 yillik ma'lumotda har bir hisobot < 1 soniya.
+TZ §9: 3 yillik ma'lumotda har bir hisobot < 1 soniya. O'lchov — `npm run bench`
+(har hisobot 10 marta, bitta isitish yugurishidan keyin).
 
 | | |
 |---|---|
-| Yozuvlar soni | ⬜ |
-| Qatorlar soni | ⬜ |
-| P&L (median / p95) | ⬜ |
-| Pul oqimi — oxirgi oy (median / p95) | ⬜ |
-| Balans — oxirgi sana (median / p95) | ⬜ |
-| Indekslar | ⬜ |
-| Optimallashtirish | ⬜ |
+| Ma'lumot | 36 oy (2024-01 … 2026-12), 520 o'quvchi, 22 xodim |
+| Yozuvlar soni | 28 170 |
+| Qatorlar soni | 56 653 |
+| P&L — oxirgi oy (median / p95) | **7.0 ms** / 16.2 ms |
+| Pul oqimi — oxirgi oy (median / p95) | **181.3 ms** / 217.1 ms |
+| Balans — oxirgi sana (median / p95) | **172.1 ms** / 219.6 ms |
+| Oylar ro'yxati (median / p95) | 2.5 ms / 3.7 ms |
+| Indekslar | `{ period: 1 }`, `{ date: 1 }` |
+| Optimallashtirish | **qilinmadi** — pastdagi izohga qarang |
 
-O'lchov `npm run bench` bilan. Pul oqimi **oxirgi oyda** o'lchanadi — oy boshidagi qoldiq oldingi 35 oyni skanerlaydi, eng qimmat holat shu.
+Muhit: Windows 11, Node.js 22, mahalliy MongoDB 8.3 (standalone).
+
+**Pul oqimi va balans ataylab oxirgi oyda o'lchangan.** Pul oqimining oy boshidagi
+qoldig'i o'zidan oldingi 35 oyni skanerlaydi, balans esa `date <= asOf` bo'yicha
+butun tarixni — ya'ni ikkalasining eng qimmat holati shu. Birinchi oyni o'lchash
+yolg'on tasalli bo'lardi (P&L ning 7 ms i shundan: u faqat bitta oyga tegadi).
+
+**Nima uchun optimallashtirilmadi.** Eng sekin so'rov p95 da 220 ms — talabdan
+4.5 barobar tez. `{ period: 1, 'lines.account': 1 }` qo'shma indeksi, `$unwind` dan
+oldingi `$project`, `monthly_balances` snapshot keshi — uchalasi ham rejada bor edi,
+lekin o'lchov ularni asoslamadi. O'lchov ko'rsatmagan optimizatsiya — bu qo'shimcha
+kod, qo'shimcha xato manbai va tushuntirib bo'lmaydigan murakkablik.
+
+Agar ma'lumot 10 barobar o'ssa, birinchi qadam qo'shma indeks bo'ladi — u
+`src/db/indexes.ts` da bir qator bilan qo'shiladi.
 
 ---
 
