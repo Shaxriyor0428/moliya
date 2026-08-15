@@ -6,6 +6,14 @@
  * tartibi zaxira bor (docs/02-model.md — "Pul birligi").
  */
 
+/**
+ * `-0` ni `0` ga aylantiradi. Ishorali summalarni yig'ishda manfiy nol tabiiy
+ * paydo bo'ladi va JSON da `-0` bo'lib chiqadi — hisobotda buni ko'rsatmaymiz.
+ */
+export function stripNegativeZero(n: number): number {
+  return n === 0 ? 0 : n;
+}
+
 export function isMoney(value: unknown): value is number {
   return typeof value === 'number' && Number.isSafeInteger(value);
 }

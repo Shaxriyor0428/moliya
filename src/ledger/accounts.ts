@@ -52,6 +52,18 @@ export const CASH_ACCOUNTS: ReadonlySet<AccountCode> = new Set<AccountCode>([
   'cash.bank',
 ]);
 
+/** Agregatsiyadagi `$in` uchun massiv shakli (Set to'g'ridan-to'g'ri uzatilmaydi). */
+export const CASH_ACCOUNT_CODES: AccountCode[] = [...CASH_ACCOUNTS];
+
+export function accountsOfType(...types: AccountType[]): AccountCode[] {
+  return ACCOUNT_CODES.filter((code) => types.includes(ACCOUNT_TYPE[code]));
+}
+
+export const REVENUE_ACCOUNTS = accountsOfType('REVENUE');
+export const EXPENSE_ACCOUNTS = accountsOfType('EXPENSE');
+/** P&L ga tushadigan hisoblar; ularning kümülativ yig'indisi = taqsimlanmagan foyda. */
+export const PNL_ACCOUNTS = accountsOfType('REVENUE', 'EXPENSE');
+
 export function typeOf(account: AccountCode): AccountType {
   return ACCOUNT_TYPE[account];
 }
